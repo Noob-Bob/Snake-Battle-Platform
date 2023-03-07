@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container content-field">
         <div class="card">
             <div class="card-body">
                 <slot></slot>
@@ -12,4 +12,7 @@
 </script>
 
 <style scoped>
+div.content-field {
+    margin-top: 20px;
+}
 </style>

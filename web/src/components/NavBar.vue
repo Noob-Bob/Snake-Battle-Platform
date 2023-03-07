@@ -10,15 +10,15 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
                 <!-- <a class="nav-link" aria-current="page" href="/pk/">Battle</a> -->
-                <router-link class="nav-link" aria-current="page" :to="{name: 'pk_index'}">Battle</router-link>
+                <router-link class="nav-link" active-class="active" aria-current="page" :to="{name: 'pk_index'}">Battle</router-link>
               </li>
               <li class="nav-item">
                 <!-- <a class="nav-link" href="/record/">Battle Records</a> -->
-                <router-link class="nav-link" :to="{name: 'record_index'}">Battle Record</router-link>
+                <router-link class="nav-link" active-class="active" :to="{name: 'record_index'}">Battle Record</router-link>
               </li>
               <li class="nav-item">
                 <!-- <a class="nav-link" href="/ranklist/">Ranking</a> -->
-                <router-link class="nav-link" :to="{name: 'ranklist_index'}">Ranking</router-link>
+                <router-link class="nav-link" active-class="active" :to="{name: 'ranklist_index'}">Ranking</router-link>
               </li>
             </ul>
             <ul class="navbar-nav">
@@ -29,7 +29,7 @@
                     <ul class="dropdown-menu">
                       <li>
                         <!-- <a class="dropdown-item" href="/user/bot/">My Bot</a> -->
-                        <router-link class="dropdown-item" :to="{name: 'user_bot_index'}">My Bot</router-link>
+                        <router-link class="dropdown-item" active-class="active" :to="{name: 'user_bot_index'}">My Bot</router-link>
                       </li>
                       <li><a class="dropdown-item" href="#">Log Out</a></li>
                     </ul>
@@ -41,6 +41,18 @@
 </template>
 
 <script>
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+
+export default {
+    setup() {
+        const route = useRoute();
+        let route_name = computed(() => route.name)
+        return {
+            route_name
+        }
+    }
+}
 </script>
 
 <style scoped>
