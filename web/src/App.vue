@@ -16,7 +16,7 @@ export default {
 
 <style>
 body {
-  background-image: url("./assets/background.webp");
+  background-image: url("./assets/images/background.webp");
   background-size: cover;
 }
 </style>
