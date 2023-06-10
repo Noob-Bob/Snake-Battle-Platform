@@ -4,6 +4,8 @@ import RanklistindexView from '../views/ranklist/RanklistindexView'
 import RecordindexView from '../views/record/RecordindexView'
 import UserbotindexView from '../views/user/bot/UserbotindexView'
 import NotFound from '../views/error/NotFound'
+import UserAccountLoginView from '../views/user/account/UserAccountLoginView'
+import UserAccountRegisterView from '../views/user/account/UserAccountRegisterView'
 const routes = [
   // redirect the root url to the pk page
   {
@@ -30,6 +32,16 @@ const routes = [
     path: "/user/bot/",
     name: "user_bot_index",
     component: UserbotindexView
+  },
+  {
+    path: "/user/account/login",
+    name: "user_account_login",
+    component: UserAccountLoginView
+  },
+  {
+    path: "/user/account/register",
+    name: "user_account_register",
+    component: UserAccountRegisterView
   },
   {
     path: "/404/",

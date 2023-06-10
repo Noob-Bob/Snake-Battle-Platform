@@ -12,8 +12,9 @@ class BackendApplicationTests {
 	void contextLoads() {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		System.out.println(passwordEncoder.encode("pyxc"));
-		System.out.println(passwordEncoder.encode("pcarol"));
-		System.out.println(passwordEncoder.encode("pdave"));
+//		System.out.println(passwordEncoder.encode("pcarol"));
+//		System.out.println(passwordEncoder.encode("pdave"));
+		System.out.println(passwordEncoder.matches("pyxc", "$2a$10$A1KFWEwnKRk1KVxdUaKdF.sWH5Gxwe272JPH7ul5mFLMuXRGS0Yeq"));
 	}
 
 }
