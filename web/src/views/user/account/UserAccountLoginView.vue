@@ -1,5 +1,5 @@
 <template>
-    <ContentField>
+    <ContentField v-if="!$store.state.user.pulling_info">
         Login
         <div class="row justify-content-md-center">
             <div class="col-3">
@@ -36,6 +36,22 @@ export default {
         let password = ref('');
         let error_message = ref('');
 
+        const jwt_token = localStorage.getItem("jwt_token");
+        if (jwt_token) {
+            store.commit("updateToken", jwt_token);
+            store.dispatch("getinfo", {
+                success() {
+                    router.push({name: "home"});
+                    store.commit("updatePullingInfo", false);
+                },
+                error() {
+                    store.commit("updatePullingInfo", false);
+                }
+            })
+        } else {
+            store.commit("updatePullingInfo", false); // use commit for methods in mutations; dispatch for those actions
+        }
+
         const login = () => {
             error_message.value = "";
             store.dispatch("login", {
@@ -45,7 +61,6 @@ export default {
                     store.dispatch("getinfo", {
                         success() {
                             router.push({name: 'home'});
-                            console.log(store.state.user);
                         }
                     })
                     router.push({ name: "home" });
