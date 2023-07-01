@@ -23,39 +23,39 @@ public class RegisterServiceImpl implements RegisterService {
   public Map<String, String> register(String username, String password, String confirmPassword) {
     Map<String, String> map = new HashMap<>();
     if (username == null) {
-      map.put("error message", "Username cannot be empty");
+      map.put("error_message", "Username cannot be empty");
       return map;
     }
     if (password == null || confirmPassword == null) {
-      map.put("error message", "Password cannot be empty");
+      map.put("error_message", "Password cannot be empty");
       return map;
     }
     username = username.trim();
     if (username.length() == 0) {
-      map.put("error message", "Username cannot be empty");
+      map.put("error_message", "Username cannot be empty");
       return map;
     }
     if (username.length() > 100) {
-      map.put("error message", "The length of username should not be greater than 100");
+      map.put("error_message", "The length of username should not be greater than 100");
       return map;
     }
     if (password.length() == 0 || confirmPassword.length() == 0) {
-      map.put("error message", "Password should not be empty");
+      map.put("error_message", "Password should not be empty");
       return map;
     }
     if (password.length() > 100 || confirmPassword.length() > 100) {
-      map.put("error message", "The length of password should not be greater than 100");
+      map.put("error_message", "The length of password should not be greater than 100");
       return map;
     }
     if (!password.equals(confirmPassword)) {
-      map.put("error message", "Passwords are different");
+      map.put("error_message", "Passwords are different");
       return map;
     }
     QueryWrapper<User> queryWrapper = new QueryWrapper<>();
     queryWrapper.eq("username", username);
     List<User> users = userMapper.selectList(queryWrapper);
     if (!users.isEmpty()) {
-      map.put("error message", "Username existed");
+      map.put("error_message", "Username existed");
       return map;
     }
 
@@ -63,7 +63,7 @@ public class RegisterServiceImpl implements RegisterService {
     String photo = "https://cdn.acwing.com/media/user/profile/photo/46915_lg_2f2af038e1.jpg";
     User user = new User(null, username, encodedPassword, photo);
     userMapper.insert(user);
-    map.put("error message", "success");
+    map.put("error_message", "success");
     return map;
   }
 }
