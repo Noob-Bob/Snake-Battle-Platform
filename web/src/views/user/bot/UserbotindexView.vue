@@ -33,7 +33,13 @@
                                       </div>
                                       <div class="mb-3">
                                         <label for="add-bot-code" class="form-label">Code</label>
-                                        <textarea v-model="botadd.content" class="form-control" id="add-bot-code" rows="10" placeholder="Input the code of the bot"></textarea>
+                                        <VAceEditor
+                                            v-model:value="botadd.content"
+                                            @init="editorInit"
+                                            lang="c_cpp"
+                                            :theme="aceConfig.theme"
+                                            style="height: 300px"
+                                            :options="aceConfig.options" class="ace-editor" />
                                       </div>
                                 </div>
                                 <div class="modal-footer">
@@ -81,7 +87,14 @@
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="add-bot-code" class="form-label">Code</label>
-                                                        <textarea v-model="bot.content" class="form-control" id="add-bot-code" rows="10" placeholder="Input the code of the bot"></textarea>
+                                                        <VAceEditor
+                                                            v-model:value="bot.content"
+                                                            @init="editorInit"
+                                                            lang="c_cpp"
+                                                            :theme="aceConfig.theme"
+                                                            style="height: 300px"
+                                                            :options="aceConfig.options" class="ace-editor" />
+
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
@@ -108,9 +121,71 @@ import { ref, reactive } from 'vue' // reactive 用于绑定对象
 import $ from 'jquery'
 import { useStore } from 'vuex'
 import { Modal } from 'bootstrap/dist/js/bootstrap'
+import { VAceEditor } from 'vue3-ace-editor';
+import "ace-builds/webpack-resolver";
+import 'ace-builds/src-noconflict/mode-json';
+import 'ace-builds/src-noconflict/theme-chrome';
+import 'ace-builds/src-noconflict/ext-language_tools';
+
 
 export default {
+    components: {
+        VAceEditor,
+    },
     setup() {
+        const aceConfig = reactive({
+            theme: 'chrome', //主题
+            arr: [
+                /*所有主题*/
+                "ambiance",
+                "chaos",
+                "chrome",
+                "clouds",
+                "clouds_midnight",
+                "cobalt",
+                "crimson_editor",
+                "dawn",
+                "dracula",
+                "dreamweaver",
+                "eclipse",
+                "github",
+                "gob",
+                "gruvbox",
+                "idle_fingers",
+                "iplastic",
+                "katzenmilch",
+                "kr_theme",
+                "kuroir",
+                "merbivore",
+                "merbivore_soft",
+                "monokai",
+                "mono_industrial",
+                "pastel_on_dark",
+                "solarized_dark",
+                "solarized_light",
+                "sqlserver",
+                "terminal",
+                "textmate",
+                "tomorrow",
+                "tomorrow_night",
+                "tomorrow_night_blue",
+                "tomorrow_night_bright",
+                "tomorrow_night_eighties",
+                "twilight",
+                "vibrant_ink",
+                "xcode",
+            ],
+            readOnly: false, //是否只读
+            options: {
+                enableBasicAutocompletion: true,
+                enableSnippets: true,
+                enableLiveAutocompletion: true,
+                tabSize: 2,
+                showPrintMargin: false,
+                fontSize: 16
+            }
+        });
+
         const store = useStore();
         let bots = ref([]);
 
@@ -209,12 +284,30 @@ export default {
             })
         }
 
+        const dataForm = reactive({
+            textareashow: '{"A":"A1"}'
+        });
+
+        const jsonError = (e) => {
+            console.log(`JSON字符串错误：${e.message}`);
+        }
+
+        const editorInit = () => {
+            try {
+                dataForm.textareashow = JSON.stringify(JSON.parse(dataForm.textareashow), null, 2)
+            } catch (e) {
+                jsonError(e)
+            }
+        };
+
         return {
             bots,
             botadd,
             add_bot,
             update_bot,
-            remove_bot
+            remove_bot,
+            editorInit,
+            aceConfig,
         }
     }
 }
