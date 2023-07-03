@@ -1,0 +1,31 @@
+// import $ from 'jquery';
+export default {
+    state: {
+        status: "matching", // matching and playing
+        socket: null,
+        opponent_username: "",
+        opponent_photo: "",
+    },
+    getters: {
+    },
+    mutations: {
+        // async operations should be put in mutations
+        updateSocket(state, socket) {
+            state.socket = socket;
+        },
+        updateOpponent(state, opponent) {
+            state.opponent_username = opponent.username;
+            state.opponent_photo = opponent.photo;
+        },
+        updateStatus(state, status) {
+            state.status = status;
+        }
+        
+    }, 
+    actions: {
+        
+    },
+    modules: {
+
+    }
+}
