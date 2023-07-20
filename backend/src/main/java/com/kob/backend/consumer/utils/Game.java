@@ -3,11 +3,11 @@ package com.kob.backend.consumer.utils;
 import java.util.Random;
 
 public class Game {
-  private Integer rows;
-  private Integer cols;
-  private Integer inner_wall_count;
+  final private Integer rows;
+  final private Integer cols;
+  final private Integer inner_wall_count;
 
-  private int[][] g;
+  final private int[][] g;
   private final static int[] dx = {-1, 0, 1, 0}, dy = {0, 1, 0, -1};
 
   public Game(Integer rows, Integer cols, Integer inner_wall_count) {
@@ -47,11 +47,7 @@ public class Game {
       }
     }
 
-    if (!this.checkConnectivity(this.rows - 2, 1, 1, this.cols - 2)) {
-      return false;
-    }
-
-    return true;
+    return this.checkConnectivity(this.rows - 2, 1, 1, this.cols - 2);
   }
 
   private boolean checkConnectivity(int sx, int sy, int tx, int ty) {
