@@ -3,15 +3,15 @@ export default {
     state: {
         id: "",
         username: "",
-        phote: "",
+        photo: "",
         token: "",
         is_login: false,
-        pulling_info: true,
+        pulling_info: true, // whether it is pulling info from cloud
     },
     getters: {
     },
     mutations: {
-        // async operations should be put in mutations
+        // sync operations should be put in mutations
         updateUser(state, user) {
             state.id = user.id;
             state.username = user.username;
@@ -24,7 +24,7 @@ export default {
         logout(state) {
             state.id = "";
             state.username = "";
-            state.phote = "";
+            state.photo = "";
             state.token = "";
             state.is_login = false;
         },
@@ -33,7 +33,8 @@ export default {
         }
     }, 
     actions: {
-        // sync operation can be put there
+        // async operation can be put there
+        // context: api; data: programmer designed parameters
         login(context, data) {
             $.ajax({
                 url: "http://127.0.0.1:3000/user/account/token/",
@@ -75,7 +76,6 @@ export default {
                     }
                 },
                 error(resp) {
-                  console.log(resp);
                     data.error(resp);
                 }
               })

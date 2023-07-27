@@ -276,7 +276,6 @@ export default {
                     Authorization: "Bearer " + store.state.user.token,
                 },
                 success(resp) {
-                    // console.log(resp);
                     if (resp.error_message === "success") {
                         refresh_bots();
                     }

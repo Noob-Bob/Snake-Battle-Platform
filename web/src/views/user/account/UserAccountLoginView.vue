@@ -63,7 +63,6 @@ export default {
                             router.push({name: 'home'});
                         }
                     })
-                    router.push({ name: "home" });
                 },
                 error() {
                     error_message.value = "Incorrent username or password";
