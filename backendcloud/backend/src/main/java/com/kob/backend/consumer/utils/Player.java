@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Player {
   private Integer id;
+  private Integer botId; // -1: manually; else using bot
+  private String botCode;
   private Integer sx;
   private Integer sy;
   private List<Integer> steps;
