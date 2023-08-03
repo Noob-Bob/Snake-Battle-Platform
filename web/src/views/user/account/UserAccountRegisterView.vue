@@ -44,7 +44,8 @@ export default {
 
         const register = () => {
             $.ajax({ // get data from backend
-                url: "http://127.0.0.1:3000/user/account/register/",
+                url: "https://app2079.acapp.acwing.com.cn/api/user/account/register/",
+                // url: "http://127.0.0.1:3000/api/user/account/register/",
                 type: "post",
                 data: {
                     username: username.value,
@@ -54,7 +55,7 @@ export default {
                 success(resp) {
                     console.log(resp);
                     if (resp.error_message === "success") {
-                        router.path.push({name: "user_account_login"});
+                        router.push({name: "user_account_login"});
                     } else {
                         error_message.value = resp.error_message;
                     }
