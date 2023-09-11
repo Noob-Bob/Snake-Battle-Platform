@@ -14,6 +14,7 @@ export class Wall extends AcGameObject {
     }
 
     render() {
+        // render a single wall cell( L X L )
         const L = this.gamemap.L;
         const ctx = this.gamemap.ctx;
 

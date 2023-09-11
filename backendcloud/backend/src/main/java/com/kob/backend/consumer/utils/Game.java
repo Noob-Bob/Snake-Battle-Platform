@@ -131,7 +131,7 @@ public class Game extends Thread {
   }
 
   public void createMap() {
-    for (int i = 0; i < 1000; i ++) {
+    for (int i = 0; i < 1000; i ++) { // try drawing the map for 1000 times until we get a valid map
       if (draw()) {
         break;
       }

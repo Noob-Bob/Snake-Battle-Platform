@@ -1,4 +1,5 @@
 <template>
+    <!-- PlayGround is the game area shown in pk view -->
     <div class="playground">
         <GameMap />
     </div>

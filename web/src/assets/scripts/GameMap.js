@@ -3,15 +3,22 @@ import { Snake } from "./Snake";
 import { Wall } from "./Wall";
 
 export class GameMap extends AcGameObject {
+    /**
+     * 
+     * @param {canvas} ctx 
+     * @param {father element of the canvas} parent
+     * @param {global state} store 
+     */
+
     constructor(ctx, parent, store) {
         super();
 
         this.ctx = ctx;
         this.parent = parent;
         this.store = store;
-        this.L = 0;
+        this.L = 0; // scaling factor, used to denote the actual size of 1 unit length
         this.rows = 13;
-        this.cols = 14;
+        this.cols = 14; // both are all relative distance
 
         this.walls = [];
         this.inner_wall_count = 20;
@@ -77,6 +84,7 @@ export class GameMap extends AcGameObject {
         
     }
 
+    // like @Override in java, used to implement the method in father class
     start() {
         for (let i = 0; i < 1000; i ++) {
             if (this.create_walls())
@@ -85,7 +93,8 @@ export class GameMap extends AcGameObject {
         this.add_listening_events();
     }
 
-    update_size() {
+    update_size() { // helper method, used to update the size of the canvas
+        // clientWidth, clientHeight -> get the width, height of parent element
         this.L = parseInt(Math.min(this.parent.clientWidth / this.cols, this.parent.clientHeight / this.rows));
         this.ctx.canvas.width = this.L * this.cols;
         this.ctx.canvas.height = this.L * this.rows;
@@ -125,7 +134,7 @@ export class GameMap extends AcGameObject {
         return true;
     }
 
-    
+    // like @Override in java, used to implement the method in father class
     update() {
         this.update_size();
         if (this.check_ready()) {
@@ -143,6 +152,14 @@ export class GameMap extends AcGameObject {
                 } else {
                     this.ctx.fillStyle = color_odd;
                 }
+                // x, y upper-left corner; width, height in pixels
+                /**
+                 * -------> x axis
+                 * |
+                 * |
+                 * |
+                 * v  y axis
+                 */
                 this.ctx.fillRect(c * this.L, r * this.L, this.L, this.L);
             }
         }

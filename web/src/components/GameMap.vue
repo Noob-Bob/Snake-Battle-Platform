@@ -1,4 +1,5 @@
 <template>
+    <!-- tmplate ref, used to direct access to the underlying dom elements -->
     <div ref="parent" class="gamemap">
         <canvas ref="canvas" tabindex="0">
 
@@ -17,7 +18,7 @@ export default {
         let parent = ref(null);
         let canvas = ref(null);
 
-        onMounted(() => {
+        onMounted(() => { // create a new GameMap object when mounted 
             store.commit("updateGameObject", 
             new GameMap(canvas.value.getContext('2d'), parent.value, store)
             );
@@ -36,7 +37,9 @@ div.gamemap {
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* left-right center */
+    align-items: center; /* top-bottom center */
+    /* Note that flex can be easilier to implement horizontal and vertical centering */
+    /* while margin is not easy to be set to vertical centering */
 }
 </style>
