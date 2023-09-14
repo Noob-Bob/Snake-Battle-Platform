@@ -1,3 +1,6 @@
+/**
+ * Base class for all the js scripts, work as an engine
+ */
 const AC_GAME_OBJECTS = [];
 
 export class AcGameObject {

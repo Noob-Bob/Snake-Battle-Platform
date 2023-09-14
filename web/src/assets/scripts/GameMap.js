@@ -2,6 +2,10 @@ import { AcGameObject } from "./AcGameObject";
 import { Snake } from "./Snake";
 import { Wall } from "./Wall";
 
+/**
+ * Top class for this Game
+ * contains all the walls, both the snakes(each consists of many cells as its body)
+ */
 export class GameMap extends AcGameObject {
     /**
      * 
@@ -114,7 +118,9 @@ export class GameMap extends AcGameObject {
         }
     }
 
-    check_valid(cell) { // check whether cell is a valid position
+    check_valid(cell) { // check whether the given cell is a valid position
+
+        // if hit the wall, return false
         for (const wall of this.walls) {
             if (wall.r === cell.r && wall.c === cell.c)
                 return false;
@@ -123,6 +129,7 @@ export class GameMap extends AcGameObject {
 
         for (const snake of this.snakes) {
             let k = snake.cells.length;
+            // do not need to check the tail if the snake does not change its length
             if (!snake.check_tail_increasing()) {
                 k --;
             }

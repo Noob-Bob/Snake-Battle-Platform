@@ -1,3 +1,6 @@
+/**
+ * Generate barrier one by one
+ */
 import { AcGameObject } from "./AcGameObject";
 
 export class Wall extends AcGameObject {
