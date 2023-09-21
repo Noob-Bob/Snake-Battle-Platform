@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-public class UpdateController {
+public class  UpdateController {
   @Autowired
   private UpdateService updateService;
   @PostMapping("/api/user/bot/update/")

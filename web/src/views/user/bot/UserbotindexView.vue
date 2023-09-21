@@ -201,7 +201,7 @@ export default {
                 url: "https://app2079.acapp.acwing.com.cn/api/user/bot/getlist/",
                 // url: "http://127.0.0.1:3000/api/user/bot/getlist/",
                 type: "get",
-                headers: { // 需要验证身份，即不被放行的页面，均需要headers
+                headers: { // need auth if not public
                     Authorization: "Bearer " + store.state.user.token,
                 },
                 success(resp) {

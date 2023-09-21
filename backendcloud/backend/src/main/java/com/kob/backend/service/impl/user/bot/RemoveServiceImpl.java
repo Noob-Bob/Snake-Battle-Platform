@@ -19,6 +19,8 @@ public class RemoveServiceImpl implements RemoveService {
   private BotMapper botMapper;
   @Override
   public Map<String, String> remove(Map<String, String> data) {
+    // only the bot owner can remove the bot
+    // so we need to get the current user
     UsernamePasswordAuthenticationToken authenticationToken =
             (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
     UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();

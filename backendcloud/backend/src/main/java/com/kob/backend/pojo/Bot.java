@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class Bot {
   @TableId(type = IdType.AUTO)
   private Integer id;
-  private Integer userId; // using camelCase naming in pojo
+  private Integer userId; // using camelCase to replace _ (note: this is a set of mybatis plus)
   private String title;
   private String description;
   private String content;
