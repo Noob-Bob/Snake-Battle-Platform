@@ -14,6 +14,10 @@ public class LoginController {
   @Autowired
   private LoginService loginService;
 
+  /**
+   * @param map a map from http post request
+   * @return
+   */
   @PostMapping("/api/user/account/token/")
   public Map<String, String> getToken(@RequestParam Map<String, String> map) {
     String username = map.get("username");

@@ -1,3 +1,7 @@
+/**
+ * vuex
+ * used to store the user info globally
+ */
 import $ from 'jquery';
 export default {
     state: {
@@ -10,17 +14,34 @@ export default {
     },
     getters: {
     },
+    // use commit to call methods in mutations
     mutations: {
         // sync operations should be put in mutations
+
+        /**
+         * update the user information
+         * @param {*} state 
+         * @param {*} user 
+         */
         updateUser(state, user) {
             state.id = user.id;
             state.username = user.username;
             state.photo = user.photo;
             state.is_login = user.is_login;
         },
+        /**
+         * update token
+         * @param {*} state 
+         * @param {*} token 
+         */
         updateToken(state, token) {
             state.token = token;
         },
+        /**
+         * exit
+         * remove jwt-token in frontend
+         * @param {*} state 
+         */
         logout(state) {
             state.id = "";
             state.username = "";
@@ -32,6 +53,7 @@ export default {
             state.pulling_info = pulling_info;
         }
     }, 
+    // use dispatch to call methods in actions
     actions: {
         // async operation can be put there
         // context: api; data: programmer designed parameters
@@ -46,8 +68,8 @@ export default {
                 },
                 success(resp) {
                     if (resp.error_message === "success") {
-                        localStorage.setItem("jwt_token", resp.token);
-                        context.commit("updateToken", resp.token);
+                        localStorage.setItem("jwt_token", resp.token); // store the jwt-token into browser localstorage
+                        context.commit("updateToken", resp.token); // action commit a mutation
                         data.success(resp);
                     } else {
                         data.error(resp);

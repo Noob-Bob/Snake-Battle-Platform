@@ -19,6 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Used to check whether a given jwt-token is valid or not
+ * If valid, then extract the user from jwt-token into the context
+ */
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
   @Autowired
@@ -26,6 +30,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
+    // Note that the get request from frontend will send its header there
     String token = request.getHeader("Authorization");
 
     if (!StringUtils.hasText(token) || !token.startsWith("Bearer ")) {

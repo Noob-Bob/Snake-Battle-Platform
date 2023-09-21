@@ -15,6 +15,7 @@
                       <div id="usernameHelp" class="form-text">Please input your password.</div>
                     </div>
                     <div class="mb-3">
+                        <!--reinput the password-->
                         <label for="Password" class="form-label">Confirm Password</label>
                         <input v-model="confirmedPassword" type="password" class="form-control" id="Password2">
                         <div id="usernameHelp" class="form-text">Please input your password again.</div>
@@ -52,9 +53,9 @@ export default {
                     password: password.value,
                     confirmedPassword: confirmedPassword.value,
                 },
-                success(resp) {
+                success(resp) { // key: "success", value: a function named success
                     console.log(resp);
-                    if (resp.error_message === "success") {
+                    if (resp.error_message === "success") { // if successfully registered, then jump to login page
                         router.push({name: "user_account_login"});
                     } else {
                         error_message.value = resp.error_message;

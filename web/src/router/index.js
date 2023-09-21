@@ -14,7 +14,7 @@ const routes = [
     path: "/",
     name: "home",
     redirect: "/pk/",
-    meta: {
+    meta: { // whether require auth
       requestAuth: true,
     }
   },
@@ -94,7 +94,15 @@ const router = createRouter({
   routes
 })
 
+/**
+ * to: target page
+ * from: from page
+ * next: operation needed
+ */
 router.beforeEach((to, from, next) => {
+  // if the targer page require auth and the current user has not auth yet
+  // then redirect to the login page
+  // else do nothing
   if (to.meta.requestAuth && !store.state.user.is_login) {
     next({name: "user_account_login"});
   } else {

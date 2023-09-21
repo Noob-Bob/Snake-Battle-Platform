@@ -20,19 +20,29 @@ public class LoginServiceImpl implements LoginService {
   private AuthenticationManager authenticationManager;
   @Override
   public Map<String, String> getToken(String username, String password) {
+    // STEP 1
+    // encapsulate username and password
+    // note that this will get encoded password
     UsernamePasswordAuthenticationToken authenticationToken =
             new UsernamePasswordAuthenticationToken(username, password);
-
+    // STEP 2
+    // then use authenticationManager to do the authentication
+    // if error occur, this will throw an exception
     Authentication authenticate = authenticationManager.authenticate(authenticationToken);
 
+    // STEP 3
+    // obtain the specific user
     UserDetailsImpl loginUser = (UserDetailsImpl) authenticate.getPrincipal();
     User user = loginUser.getUser();
 
+
+    // Create a jwt-token
     String jwt = JwtUtil.createJWT(user.getId().toString());
+    // Note that this should correspond to the frontend
     Map<String, String> map = new HashMap<>();
     map.put("error_message", "success");
-
     map.put("token", jwt);
+
     return map;
   }
 }

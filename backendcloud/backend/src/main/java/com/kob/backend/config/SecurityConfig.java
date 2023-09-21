@@ -21,6 +21,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
+  /**
+   * used to encode the password that the user input
+   * @return
+   */
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
@@ -38,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/api/user/account/token/", "/api/user/account/register/").permitAll()
+            .antMatchers("/api/user/account/token/", "/api/user/account/register/").permitAll() // set the two url public
             .antMatchers("/pk/start/game/", "/pk/receive/bot/move/").hasIpAddress("127.0.0.1")
             .antMatchers(HttpMethod.OPTIONS).permitAll()
             .anyRequest().authenticated();

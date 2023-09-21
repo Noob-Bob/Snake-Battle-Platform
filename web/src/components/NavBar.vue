@@ -63,7 +63,6 @@ export default {
     /** used to know which page we are currently stay in
      * to adjust the active attributes of navbar items
      **/
-    
     let route_name = computed(() => route.name);
 
     const logout = () => {
