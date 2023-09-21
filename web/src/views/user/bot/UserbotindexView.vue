@@ -11,7 +11,7 @@
             <div class="col-9">
                 <div class="card" style="margin-top: 20px;">
                     <div class="card-header">
-                        <span style="font-size: 130%;">My Bot</span>
+                        <span style="font-size: 130%;">My Bot</span> <!--float-end right alignment-->
                         <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#add-bot-btn">Create Bot</button>
                         
                         <!-- Modal -->
@@ -69,6 +69,7 @@
                                         <button type="button" class="btn btn-danger" @click="remove_bot(bot)">Delete</button>
 
                                         <!-- Modal -->
+                                        <!-- each modal has a unique id (equal to bot.id) -->
                                         <div class="modal fade" :id="'update-bot-model-' + bot.id" tabindex="-1">
                                             <div class="modal-dialog modal-xl">
                                             <div class="modal-content">
@@ -117,10 +118,10 @@
 </template>
 
 <script>
-import { ref, reactive } from 'vue' // reactive 用于绑定对象
+import { ref, reactive } from 'vue' // use reactive to bind a object
 import $ from 'jquery'
 import { useStore } from 'vuex'
-import { Modal } from 'bootstrap/dist/js/bootstrap'
+import { Modal } from 'bootstrap/dist/js/bootstrap' // Modal api repo
 import { VAceEditor } from 'vue3-ace-editor';
 import "ace-builds/webpack-resolver";
 import 'ace-builds/src-noconflict/mode-json';
@@ -133,6 +134,7 @@ export default {
         VAceEditor,
     },
     setup() {
+        // reference: https://www.acwing.com/solution/content/176492/
         const aceConfig = reactive({
             theme: 'chrome', //主题
             arr: [
@@ -231,7 +233,7 @@ export default {
                         botadd.title = "";
                         botadd.description = "";
                         botadd.content = "";
-                        Modal.getInstance("#add-bot-btn").hide();
+                        Modal.getInstance("#add-bot-btn").hide(); // close the modal
                         refresh_bots();
 
                     } else {
