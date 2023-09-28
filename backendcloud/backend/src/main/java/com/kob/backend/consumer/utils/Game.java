@@ -16,13 +16,21 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * this Game class is used to manage the whole process of the game
+ * multithreading`
+ */
 public class Game extends Thread {
+  // game map related information
   final private Integer rows;
   final private Integer cols;
   final private Integer inner_wall_count;
-  final private int[][] g;
+  final private int[][] g; // game map
   private final static int[] dx = {-1, 0, 1, 0}, dy = {0, 1, 0, -1};
+  // players related info
   private final Player playerA, playerB;
+
+  // next operation of user A/B
   private Integer nextStepA = null;
   private Integer nextStepB = null;
   private final ReentrantLock lock = new ReentrantLock();
@@ -66,6 +74,10 @@ public class Game extends Thread {
     return playerB;
   }
 
+  /**
+   * set the next operation of user A
+   * @param nextStepA
+   */
   public void setNextStepA(Integer nextStepA) {
     lock.lock();
     try {
@@ -74,7 +86,10 @@ public class Game extends Thread {
       lock.unlock();
     }
   }
-
+  /**
+   * set the next operation of user B
+   * @param nextStepB
+   */
   public void setNextStepB(Integer nextStepB) {
     lock.lock();
     try {
@@ -83,39 +98,58 @@ public class Game extends Thread {
       lock.unlock();
     }
   }
+
+  /**
+   * return the generated game map
+   * @return a 2D int array, representing the game map for the two players
+   */
   public int[][] getG() {
     return this.g;
   }
 
+  /**
+   * generate the game map
+   * @return boolean variable, representing whether the map is valid
+   */
   private boolean draw() {
+    // step1: initialization
     for (int i = 0; i < this.rows; i ++) {
       for (int j = 0; j < this.cols; j ++) {
         g[i][j] = 0;
       }
     }
 
+    // step2: draw the four edges
     for (int i = 0; i < this.rows; i ++) {
       g[i][0] = g[i][this.cols - 1] = 1;
     }
-
     for (int j = 0; j < this.cols; j ++) {
       g[0][j] = g[this.rows - 1][j] = 1;
     }
+
+    // step3: draw the inner part of the map
     Random random = new Random();
     for (int i = 0; i < this.inner_wall_count / 2; i ++) {
-      for (int j = 0; j < 1000; j ++) {
-        int r = random.nextInt(this.rows);
+      for (int j = 0; j < 1000; j ++) { // try drawing 1000 times
+        int r = random.nextInt(this.rows); // generate a random number in range [0, this.rows)
         int c = random.nextInt(this.cols);
-        // central symmetry
         if (g[r][c] == 1 || g[this.rows - 1 - r][this.cols - 1 - c] == 1) continue; // no repeat
         if (r == this.rows - 2 && c == 1 || r == 1 && c == this.cols - 2) continue; // valid start point
-        g[r][c] = g[this.rows - 1 - r][this.cols - 1 - c] = 1;
+        g[r][c] = g[this.rows - 1 - r][this.cols - 1 - c] = 1; // central symmetry
         break;
       }
     }
     return this.checkConnectivity(this.rows - 2, 1, 1, this.cols - 2);
   }
 
+  /**
+   * check whether the game map is connected
+   * @param sx start position x coordinate
+   * @param sy start position y coordinate
+   * @param tx end position x coordinate
+   * @param ty end position x coordinate
+   * @return boolean, whether it is connected
+   */
   private boolean checkConnectivity(int sx, int sy, int tx, int ty) {
     if (sx == tx && sy == ty) return true;
     g[sx][sy] = 1;
@@ -131,6 +165,10 @@ public class Game extends Thread {
     return false;
   }
 
+  /**
+   * generate the game map
+   * try 1000 times of draw function to get a valid map
+   */
   public void createMap() {
     for (int i = 0; i < 1000; i ++) { // try drawing the map for 1000 times until we get a valid map
       if (draw()) {
@@ -167,7 +205,16 @@ public class Game extends Thread {
     data.add("input", getInput(player));
     WebSocketServer.restTemplate.postForObject(addBotUrl, data, String.class);
   }
-  private boolean nextStep() { // get the next operations for the current two users
+
+  /**
+   * Get the next operations for the current two users
+   *
+   * TimeLimit = 10s
+   * If we get operations from both of the users within the time limit, then update their steps array
+   * else we return false
+   * @return
+   */
+  private boolean nextStep() {
     try {
       Thread.sleep(200); // make sure frontend can render properly
     } catch (InterruptedException e) {
@@ -196,6 +243,12 @@ public class Game extends Thread {
     return false;
   }
 
+  /**
+   * check whether the current state is valid or not
+   * @param cellsA body of snake A
+   * @param cellsB body of snake B
+   * @return boolean
+   */
   private boolean check_valid(List<Cell> cellsA, List<Cell> cellsB) {
     int n = cellsA.size();
     Cell cell = cellsA.get(n - 1); // head of the snake
@@ -215,6 +268,10 @@ public class Game extends Thread {
 
     return true;
   }
+
+  /**
+   * check whether the next operation of the two users are valid or not
+   */
   private void judge() {
     List<Cell> cellsA = playerA.getCells();
     List<Cell> cellsB = playerB.getCells();
@@ -234,6 +291,10 @@ public class Game extends Thread {
     }
   }
 
+  /**
+   * send given message to both users
+   * @param message the given message
+   */
   private void sendAllMessage(String message) {
     if (WebSocketServer.users.get(playerA.getId()) != null)
       WebSocketServer.users.get(playerA.getId()).sendMessage(message);
@@ -241,6 +302,9 @@ public class Game extends Thread {
       WebSocketServer.users.get(playerB.getId()).sendMessage(message);
   }
 
+  /**
+   * send users' operation to the frontend, synchronizing
+   */
   private void sendMove() { // broadcast movement info
     lock.lock();
     try {
@@ -299,7 +363,11 @@ public class Game extends Thread {
     );
     WebSocketServer.recordMapper.insert(record);
   }
-  private void sendResult() { // broadcast the result
+
+  /**
+   * broadcast the result to the users
+   */
+  private void sendResult() {
     JSONObject resp = new JSONObject();
     resp.put("event", "result");
     resp.put("loser", loser);
@@ -307,7 +375,9 @@ public class Game extends Thread {
     sendAllMessage(resp.toJSONString());
   }
 
-
+  /**
+   * entrance for the thread class
+   */
   @Override
   public void run() {
     for (int i = 0; i < 1000; i ++) {

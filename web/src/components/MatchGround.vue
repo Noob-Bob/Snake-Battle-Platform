@@ -63,6 +63,8 @@ export default {
         const click_match_btn = () => {
             if (match_btn_info.value === "start matching") {
                 match_btn_info.value = "cancel";
+                // Note that socket has an api called send, 
+                // which can be used to send a string to the backend
                 store.state.pk.socket.send(JSON.stringify({
                     event: "start-matching",
                     bot_id: select_bot.value

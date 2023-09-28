@@ -16,28 +16,33 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.Iterator;
+
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 @Component
-@ServerEndpoint("/websocket/{token}")  // 注意不要以'/'结尾
-public class WebSocketServer { // 非单例模式，即可能同时存在多个实例
+// Note that each endpoint corresponds to a link
+@ServerEndpoint("/websocket/{token}") // resource url
+public class WebSocketServer {
 
+  // once there is a request, it will open a new thread to deal with this request
+  // users stores the mapping from userId to its websocket server
   final public static ConcurrentHashMap<Integer, WebSocketServer> users = new ConcurrentHashMap<>();
   private User user;
   private Session session = null;
   public static UserMapper userMapper;
   public static RecordMapper recordMapper;
   private static BotMapper botMapper;
-  public static RestTemplate restTemplate;
+  public static RestTemplate restTemplate; // send request from backend to microservice matching system
   public Game game = null;
   private final static String addPlayerUrl = "http://127.0.0.1:3001/player/add/";
   private final static String removePlayerUrl = "http://127.0.0.1:3001/player/remove/";
+
+  // Note that since websocket is not singleton
+  // so when field injection is required, we must inject to methods
   @Autowired
   public void setUserMapper(UserMapper userMapper) {
     WebSocketServer.userMapper = userMapper;
@@ -77,7 +82,15 @@ public class WebSocketServer { // 非单例模式，即可能同时存在多个�
     }
   }
 
-  public static void startGame(Integer aId, Integer aBotId, Integer bId, Integer bBotId) { // enclose starting game logic
+  /**
+   * enclose starting game logic
+   * remove two matched user from matching pool and start a game
+   * @param aId id of user A
+   * @param aBotId bot id of user A
+   * @param bId id of user B
+   * @param bBotId bot id of user B
+   */
+  public static void startGame(Integer aId, Integer aBotId, Integer bId, Integer bBotId) {
     User a = userMapper.selectById(aId), b = userMapper.selectById(bId); // get user from database
     Bot botA = botMapper.selectById(aBotId), botB = botMapper.selectById(bBotId);
     Game game = new Game(
@@ -128,6 +141,7 @@ public class WebSocketServer { // 非单例模式，即可能同时存在多个�
     data.add("user_id", this.user.getId().toString());
     data.add("rating", this.user.getRating().toString());
     data.add("bot_id", botId.toString());
+    // send data to url addPlayer
     restTemplate.postForObject(addPlayerUrl, data, String.class);
   }
 
@@ -148,9 +162,10 @@ public class WebSocketServer { // 非单例模式，即可能同时存在多个�
     }
   }
   @OnMessage
-  public void onMessage(String message, Session session) { // user
+  public void onMessage(String message, Session session) { // used as a router
     // 从Client接收消息
     System.out.println("received message");
+    // parse the string that passed from frontend
     JSONObject data = JSONObject.parseObject(message);
     String event = data.getString("event");
     if ("start-matching".equals(event)) {
@@ -166,8 +181,14 @@ public class WebSocketServer { // 非单例模式，即可能同时存在多个�
   public void onError(Session session, Throwable error) {
     error.printStackTrace();
   }
-  // send message from backend to frontend
+
+  /**
+   * send message from backend to frontend
+   * @param message, content that needed to be sent
+   */
   public void sendMessage(String message) {
+    // synchronized blocks
+    // only one thread can access
     synchronized (this.session) {
       try {
         this.session.getBasicRemote().sendText(message);

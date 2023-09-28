@@ -76,7 +76,7 @@ export class GameMap extends AcGameObject {
                 else if (e.key === 'd') d = 1;
                 else if (e.key === 's') d = 2;
                 else if (e.key === 'a') d = 3;
-
+                // send the user input to backend
                 if (d >= 0) {
                     this.store.state.pk.socket.send(JSON.stringify({
                         event: "move",
@@ -90,10 +90,7 @@ export class GameMap extends AcGameObject {
 
     // like @Override in java, used to implement the method in father class
     start() {
-        for (let i = 0; i < 1000; i ++) {
-            if (this.create_walls())
-                break;
-        }
+        this.create_walls();
         this.add_listening_events();
     }
 

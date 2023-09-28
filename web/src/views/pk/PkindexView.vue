@@ -63,7 +63,7 @@ export default {
                     });
                     setTimeout(() => {
                         store.commit("updateStatus", "playing");
-                    }, 200);
+                    }, 2000); 
                     store.commit("updateGame", data.game);
                 } else if (data.event === "move") {
                     console.log(data);
@@ -90,7 +90,8 @@ export default {
                 console.log("disconnected");
             }
         });
-
+        // when leave the pk page, which is refered as quit this game
+        // so we set the status io matching
         onUnmounted(() => {
             socket.close();
             store.commit("updateStatus", "matching");

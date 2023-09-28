@@ -10,7 +10,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+  /**
+   * Only request from backend can be sent to matching system for security reason
+   * @param http
+   * @throws Exception
+   */
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable()

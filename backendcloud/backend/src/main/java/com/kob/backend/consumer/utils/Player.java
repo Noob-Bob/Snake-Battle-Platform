@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Play class is used to maintain the information of players
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,12 +19,22 @@ public class Player {
   private String botCode;
   private Integer sx;
   private Integer sy;
-  private List<Integer> steps;
+  private List<Integer> steps; // operation history
 
-  private boolean check_tail_increasing(int steps) { // length of the snake is increasing or not
+  /**
+   * check whether the length of the snake is increasing or not for the current round
+   * @param steps number of rounds
+   * @return boolean
+   */
+  private boolean check_tail_increasing(int steps) { //
     if (steps <= 10) return true;
     return steps % 3 == 1;
   }
+
+  /**
+   * get the body cells of a snake
+   * @return a list containing the cells
+   */
   public List<Cell> getCells() {
     List<Cell> res = new ArrayList<>();
 
@@ -34,7 +47,7 @@ public class Player {
       y += dy[d];
       res.add(new Cell(x, y));
       if (!check_tail_increasing(++ step)) {
-        res.remove(0);
+        res.remove(0); // remove the tail
       }
     }
     return res;

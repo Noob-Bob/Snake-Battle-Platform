@@ -52,6 +52,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(WebSecurity web) throws Exception {
-    web.ignoring().antMatchers("/websocket/**");
+    web.ignoring().antMatchers("/websocket/**"); // publicize all websocket url
   }
 }
