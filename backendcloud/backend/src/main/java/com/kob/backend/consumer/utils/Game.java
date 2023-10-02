@@ -53,12 +53,12 @@ public class Game extends Thread {
 
     Integer botIdA = -1, botIdB = -1;
     String botCodeA = "", botCodeB = "";
-    if (botA != null) {
+    if (botA != null) { // if not manual
       botIdA = botA.getId();
       botCodeA = botA.getContent();
     }
 
-    if (botB != null) {
+    if (botB != null) { // if not manual
       botIdB = botB.getId();
       botCodeB = botB.getContent();
     }
@@ -177,9 +177,14 @@ public class Game extends Thread {
     }
   }
 
+  /**
+   * encode the current game progress, containing all the game information
+   * @param player current player
+   * @return a coded string
+   *        _______#________#________#(__________)#_________#_______#(_________)
+   *        map       me.sx    me.sy    me.op       you.sx    you.sy   you.op
+   */
   private String getInput(Player player) { // encode the game into a string
-    // _______#________#________#(__________)#_________#_______#(_________)
-    // map       me.sx    me.sy    me.op     you.sx    you.sy   you.op
     Player me, you;
     if (playerA.getId().equals(player.getId())) {
       me = playerA;
@@ -197,6 +202,11 @@ public class Game extends Thread {
             you.getSy() + "#(" +
             you.getStepsString() + ")";
   }
+
+  /**
+   * when some user use a bot, we need to pass the bot code to bot running system
+   * @param player current player
+   */
   private void sendBotCode(Player player) {
     if (player.getBotId().equals(-1)) return; // human player
     MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
@@ -208,11 +218,10 @@ public class Game extends Thread {
 
   /**
    * Get the next operations for the current two users
-   *
    * TimeLimit = 10s
    * If we get operations from both of the users within the time limit, then update their steps array
    * else we return false
-   * @return
+   * @return boolean, whether we get the input of both users with time limit
    */
   private boolean nextStep() {
     try {

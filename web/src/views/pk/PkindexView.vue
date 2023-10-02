@@ -63,7 +63,7 @@ export default {
                     });
                     setTimeout(() => {
                         store.commit("updateStatus", "playing");
-                    }, 2000); 
+                    }, 150); 
                     store.commit("updateGame", data.game);
                 } else if (data.event === "move") {
                     console.log(data);

@@ -35,7 +35,7 @@ public class WebSocketServer {
   private Session session = null;
   public static UserMapper userMapper;
   public static RecordMapper recordMapper;
-  private static BotMapper botMapper;
+  private static BotMapper botMapper; // fetch the bot code using bot id
   public static RestTemplate restTemplate; // send request from backend to microservice matching system
   public Game game = null;
   private final static String addPlayerUrl = "http://127.0.0.1:3001/player/add/";
@@ -92,7 +92,7 @@ public class WebSocketServer {
    */
   public static void startGame(Integer aId, Integer aBotId, Integer bId, Integer bBotId) {
     User a = userMapper.selectById(aId), b = userMapper.selectById(bId); // get user from database
-    Bot botA = botMapper.selectById(aBotId), botB = botMapper.selectById(bBotId);
+    Bot botA = botMapper.selectById(aBotId), botB = botMapper.selectById(bBotId); // get bot
     Game game = new Game(
             13,
             14,
@@ -152,6 +152,11 @@ public class WebSocketServer {
     restTemplate.postForObject(removePlayerUrl, data, String.class);
   }
 
+  /**
+   * set the direction of the snake for the current player
+   * if the current player uses bot, then block its manual input
+   * @param direction int representing the direction
+   */
   private void move(int direction) {
     if (game.getPlayerA().getId().equals(user.getId())) {
       if (game.getPlayerA().getBotId().equals(-1)) // only accept human inputs

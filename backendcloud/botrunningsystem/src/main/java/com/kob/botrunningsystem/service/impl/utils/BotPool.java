@@ -8,7 +8,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class BotPool extends Thread {
   private final ReentrantLock lock = new ReentrantLock();
   private final Condition condition = lock.newCondition();
-  private final Queue<Bot> bots = new LinkedList<>();
+  private final Queue<Bot> bots = new LinkedList<>(); // consumer: remove the top element
+                                                      // producer: add new element to it
   public void addBot(Integer userId, String botCode, String input) {
     lock.lock();
     try {
@@ -27,7 +28,7 @@ public class BotPool extends Thread {
   public void run() {
     while (true) {
       lock.lock();
-      if (bots.isEmpty()) {
+      if (bots.isEmpty()) { // no tasks under waiting, then block the process
         try {
           condition.await(); // block
         } catch (InterruptedException e) {

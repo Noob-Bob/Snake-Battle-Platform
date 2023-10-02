@@ -27,10 +27,10 @@ public class Consumer extends Thread {
   }
   public void startTimeout(long timeout, Bot bot) {
     this.bot = bot;
-    this.start();
+    this.start(); // start a new thread
 
     try {
-      this.join(timeout);
+      this.join(timeout); // wait at most timeout seconds
     } catch (InterruptedException e) {
       e.printStackTrace();
     } finally {
@@ -38,6 +38,12 @@ public class Consumer extends Thread {
     }
   }
 
+  /**
+   * append a uid at class name
+   * @param code bot code
+   * @param uid uid
+   * @return bot code after being appended
+   */
   private String addUid(String code, String uid) {
     int k = code.indexOf(" implements java.util.function.Supplier<Integer>");
     return code.substring(0, k) + uid + code.substring(k);
@@ -48,7 +54,8 @@ public class Consumer extends Thread {
     UUID uuid = UUID.randomUUID();
     String uid = uuid.toString().substring(0, 8);
     Supplier<Integer> botInterface = Reflect.compile(
-      "com.kob.botrunningsystem.utils.Bot" + uid,
+      "com.kob.botrunningsystem.utils.Bot" + uid, // make sure each name is different
+                                                        // because classes with the same name are only compiled once
             addUid(bot.getBotCode(), uid)
     ).create().get();
 
