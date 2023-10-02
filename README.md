@@ -8,7 +8,7 @@ In this project, you can play Snake with your friends. Each time you can play wi
 
 You can see the main structure of the project in the picture shown below:
 
-![Main Structure](./structure.jpg)
+![Main Structure](structure.jpg)
 
 ### Features
 
